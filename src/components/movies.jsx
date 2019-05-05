@@ -1,21 +1,24 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
-import Like from "./common/like";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import ListGroup from "./common/listGroup";
+import MoviesTable from "./moviesTable";
+import _ from "lodash";
 
 class Movies extends Component {
   state = {
     movies: [], //getMovies() - do this in componentDidMount life-cycle hook
     genres: [],
     pageSize: 4,
-    currentPage: 1
+    currentPage: 1,
+    sort: { column: "title", order: "asc" }
   };
 
+  //Good practice to initailize arrays in componentDidMount
   componentDidMount() {
-    const genres = [{ name: "All Genres" }, ...getGenres()];
+    const genres = [{ _id: "", name: "All Genres" }, ...getGenres()];
 
     this.setState({ movies: getMovies(), genres });
   }
@@ -41,9 +44,36 @@ class Movies extends Component {
 
   handleGenreSelect = genre => {
     console.log(genre);
-    // // if (genre.name === "All Genres") this.setState({ selectedGenre: null });
-    // else
     this.setState({ selectedGenre: genre, currentPage: 1 });
+  };
+
+  handleSort = sort => {
+    this.setState({ sort });
+  };
+
+  getPagedData = () => {
+    const {
+      movies: allMovies,
+      pageSize,
+      currentPage,
+      selectedGenre,
+      sort
+    } = this.state;
+
+    // FILTER
+    const filtered =
+      selectedGenre && selectedGenre._id
+        ? allMovies.filter(m => m.genre._id === selectedGenre._id)
+        : allMovies;
+
+    //SORT
+    const sortedMovies = _.orderBy(filtered, [sort.column], [sort.order]);
+    //console.log(sort.column + " " + sort.order);
+
+    //PAGINATE
+    const movies = paginate(sortedMovies, pageSize, currentPage);
+
+    return { totalCount: filtered.length, movies };
   };
 
   render() {
@@ -53,14 +83,11 @@ class Movies extends Component {
       genres,
       pageSize,
       currentPage,
-      selectedGenre
+      selectedGenre,
+      sort
     } = this.state;
 
-    const filtered =
-      selectedGenre && selectedGenre._id
-        ? allMovies.filter(m => m.genre._id === selectedGenre._id)
-        : allMovies;
-    const movies = paginate(filtered, pageSize, currentPage);
+    const { totalCount, movies } = this.getPagedData();
 
     if (count === 0) return <p>There are no movies in the database.</p>;
 
@@ -73,48 +100,21 @@ class Movies extends Component {
             selectedItem={this.state.selectedGenre}
           />
         </div>
-        <div className="col">
-          <p>Showing {filtered.length} movies in the database.</p>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Genre</th>
-                <th>Stock</th>
-                <th>Rate</th>
-                <th />
-                <th />
-              </tr>
-            </thead>
 
-            <tbody>
-              {movies.map(movie => (
-                <tr key={movie._id}>
-                  <td>{movie.title}</td>
-                  <td>{movie.genre.name}</td>
-                  <td>{movie.numberInStock}</td>
-                  <td>{movie.dailyRentalRate}</td>
-                  <td>
-                    <Like
-                      like={movie.like}
-                      onClick={() => this.handleLike(movie)}
-                    />
-                  </td>
-                  <td>
-                    <button
-                      onClick={() => this.handleDelete(movie)}
-                      className="btn btn-sm btn-danger"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="col">
+          <p>Showing {totalCount} movies in the database.</p>
+
+          <MoviesTable
+            movies={movies}
+            onLike={this.handleLike}
+            onDelete={this.handleDelete}
+            sort={this.state.sort}
+            onSort={this.handleSort}
+          />
+
           <Pagination
             pageSize={pageSize} //try giving a string for pageSize, you wont get errors, but only 1 page shows up. In future, if this component is reused in any other part and a wrong type is given, it will be hard to find where is the bug. So we need to implement type check using propTypes library in React. Its a good practice to define it in every component.
-            totalMoviesCount={filtered.length}
+            totalMoviesCount={totalCount}
             currentPage={currentPage}
             onClick={this.handlePageChange}
           />

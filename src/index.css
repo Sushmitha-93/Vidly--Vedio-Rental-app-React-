@@ -2,3 +2,7 @@ body {
   font-family: sans-serif;
   padding: 20px 0 0 0;
 }
+
+.clickable{
+  cursor: pointer;
+}

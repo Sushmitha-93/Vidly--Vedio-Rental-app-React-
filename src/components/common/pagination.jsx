@@ -2,9 +2,7 @@ import React from "react";
 import _ from "lodash";
 import PropTypes from "prop-types";
 
-const Pagination = props => {
-  const { pageSize, totalMoviesCount, currentPage, onClick } = props;
-
+const Pagination = ({ pageSize, totalMoviesCount, currentPage, onClick }) => {
   const totalPages = Math.ceil(totalMoviesCount / pageSize);
 
   // creating array of page numbers we want - 1,2,3...totalPages
