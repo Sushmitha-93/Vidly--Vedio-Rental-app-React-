@@ -79,12 +79,12 @@ class Movies extends Component {
   render() {
     const { length: count } = this.state.movies;
     const {
-      movies: allMovies,
+      // movies: allMovies,
       genres,
       pageSize,
-      currentPage,
-      selectedGenre,
-      sort
+      currentPage
+      // selectedGenre,
+      // sort
     } = this.state;
 
     const { totalCount, movies } = this.getPagedData();

@@ -6,6 +6,10 @@ body {
   cursor: pointer;
 }
 
-nav{
+nav {
   margin-bottom: 30px;
 }
+
+/* #loginForm {
+  width: 500px;
+} */
