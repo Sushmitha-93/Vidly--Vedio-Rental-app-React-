@@ -1,23 +1,22 @@
-import React, { Component } from "react";
-import Input from "./common/input";
+import React from "react";
 import Form from "./common/form";
-
 import Joi from "joi-browser";
 
-class LoginForm extends Form {
-  //creating ref object
-  // username = React.createRef();
-
+class RegisterForm extends Form {
   state = {
-    data: { username: "", password: "" },
+    data: { name: "", email: "", password: "" },
     errors: {}
   };
 
   //Schema for joi validation
   schema = {
-    username: Joi.string()
+    name: Joi.string()
       .required()
-      .label("Username"),
+      .label("Name"),
+    email: Joi.string()
+      .required()
+      .email({ minDomainAtoms: 2 })
+      .label("Email"),
     password: Joi.string()
       .required()
       .label("Password")
@@ -25,16 +24,17 @@ class LoginForm extends Form {
 
   doSubmit = () => {
     //call to server
-    console.log("Login form Submitted");
+    console.log("Register form Submitted");
   };
 
   render() {
     return (
       <div className="row justify-content-center">
         <div className="col-md-5">
-          <h1 className="text-center">Login Form</h1>
-          <form id="loginForm" onSubmit={this.handleSubmit}>
-            {this.renderInput("username", "Username", true)}
+          <h1 className="text-center">Register Form</h1>
+          <form id="registerForm" onSubmit={this.handleSubmit}>
+            {this.renderInput("name", "Name", true)}
+            {this.renderInput("email", "Email")}
             {this.renderInput("password", "Password", false, "password")}
             {this.renderButton("Login")}
           </form>
@@ -44,4 +44,4 @@ class LoginForm extends Form {
   }
 }
 
-export default LoginForm;
+export default RegisterForm;

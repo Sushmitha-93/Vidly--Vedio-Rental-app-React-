@@ -7,11 +7,10 @@ class Form extends Component {
     data: {},
     errors: {}
   };
-
   validate = () => {
     const options = { abortEarly: false };
     const result = Joi.validate(this.state.data, this.schema, options);
-    //console.log(result);
+    console.log(result);
     if (!result.error) return null;
 
     const errors = {};
@@ -41,18 +40,6 @@ class Form extends Component {
     //   if (currentTarget.value.trim() === "") return "Password is required";
   };
 
-  handleChange = e => {
-    // to clean up the code, you can use object destucturing for e -{currentTarget:input} and then use input in place of e.currentTarget
-    const { errors } = this.state;
-    const errorMessage = this.validateProperty(e.currentTarget);
-    if (errorMessage) errors[e.currentTarget.id] = errorMessage;
-    else delete errors[e.currentTarget.id];
-
-    const data = { ...this.state.data };
-    data[e.currentTarget.id] = e.currentTarget.value; //to handle multiple inputs use []
-    this.setState({ data });
-  };
-
   handleSubmit = e => {
     e.preventDefault();
     // const username = this.username.current.value;
@@ -65,7 +52,19 @@ class Form extends Component {
     this.doSubmit();
   };
 
-  renderLabel = label => {
+  handleChange = e => {
+    // to clean up the code, you can use object destucturing for e -{currentTarget:input} and then use input in place of e.currentTarget
+    const { errors } = this.state;
+    const errorMessage = this.validateProperty(e.currentTarget);
+    if (errorMessage) errors[e.currentTarget.id] = errorMessage;
+    else delete errors[e.currentTarget.id];
+
+    const data = { ...this.state.data };
+    data[e.currentTarget.id] = e.currentTarget.value; //to handle multiple inputs use []
+    this.setState({ data });
+  };
+
+  renderButton = label => {
     return (
       <button className="btn btn-primary" disabled={this.validate()}>
         {/* For disabling button on errors */}

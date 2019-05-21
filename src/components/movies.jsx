@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
 import Pagination from "./common/pagination";
@@ -102,8 +103,12 @@ class Movies extends Component {
         </div>
 
         <div className="col">
+          <Link to="/movies/new">
+            <button className="btn btn-primary">New Movie</button>
+          </Link>
+          <br />
+          <br />
           <p>Showing {totalCount} movies in the database.</p>
-
           <MoviesTable
             movies={movies}
             onLike={this.handleLike}
@@ -111,7 +116,6 @@ class Movies extends Component {
             sort={this.state.sort}
             onSort={this.handleSort}
           />
-
           <Pagination
             pageSize={pageSize} //try giving a string for pageSize, you wont get errors, but only 1 page shows up. In future, if this component is reused in any other part and a wrong type is given, it will be hard to find where is the bug. So we need to implement type check using propTypes library in React. Its a good practice to define it in every component.
             totalMoviesCount={totalCount}
