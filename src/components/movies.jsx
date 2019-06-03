@@ -35,7 +35,7 @@ class Movies extends Component {
     console.log(movie);
     const movies = [...this.state.movies];
     const index = movies.findIndex(m => m._id === movie._id);
-    movies[index].like = !movies[index].like;
+    movies[index].like = !movies[index].like; //it will add like property if not there
     this.setState({ movies });
   };
 
