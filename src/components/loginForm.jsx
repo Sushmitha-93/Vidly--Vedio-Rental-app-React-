@@ -4,9 +4,6 @@ import Form from "./common/form";
 import Joi from "joi-browser";
 
 class LoginForm extends Form {
-  //creating ref object
-  // username = React.createRef();
-
   state = {
     data: { username: "", password: "" },
     errors: {}

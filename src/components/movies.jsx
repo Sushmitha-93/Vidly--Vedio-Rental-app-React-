@@ -7,6 +7,7 @@ import { paginate } from "../utils/paginate";
 import ListGroup from "./common/listGroup";
 import MoviesTable from "./moviesTable";
 import _ from "lodash";
+import Search from "./search";
 
 class Movies extends Component {
   state = {
@@ -14,7 +15,8 @@ class Movies extends Component {
     genres: [],
     pageSize: 4,
     currentPage: 1,
-    sort: { column: "title", order: "asc" }
+    sort: { column: "title", order: "asc" },
+    search: ""
   };
 
   //Good practice to initailize arrays in componentDidMount
@@ -44,12 +46,18 @@ class Movies extends Component {
   };
 
   handleGenreSelect = genre => {
-    console.log(genre);
-    this.setState({ selectedGenre: genre, currentPage: 1 });
+    // console.log(genre);
+    this.setState({ selectedGenre: genre, currentPage: 1, search: "" });
   };
 
   handleSort = sort => {
     this.setState({ sort });
+  };
+
+  handleSearch = search => {
+    //let search = e.currentTarget.value;  //put this in search component only to make code cleaner
+    this.setState({ search, selectedGenre: null, currentPage: 1 });
+    //console.log("Handle search ", e.currentTarget.value);
   };
 
   getPagedData = () => {
@@ -58,14 +66,21 @@ class Movies extends Component {
       pageSize,
       currentPage,
       selectedGenre,
-      sort
+      sort,
+      search
     } = this.state;
 
     // FILTER
-    const filtered =
-      selectedGenre && selectedGenre._id
-        ? allMovies.filter(m => m.genre._id === selectedGenre._id)
-        : allMovies;
+    let filtered;
+    if (search !== "")
+      filtered = allMovies.filter(
+        m => m.title.toLowerCase().search(search.toLowerCase()) >= 0
+      );
+    else
+      filtered =
+        selectedGenre && selectedGenre._id
+          ? allMovies.filter(m => m.genre._id === selectedGenre._id)
+          : allMovies;
 
     //SORT
     const sortedMovies = _.orderBy(filtered, [sort.column], [sort.order]);
@@ -93,8 +108,8 @@ class Movies extends Component {
     if (count === 0) return <p>There are no movies in the database.</p>;
 
     return (
-      <div className="row">
-        <div className="col-2">
+      <div className="row justify-content-center">
+        <div className="col-md-2">
           <ListGroup
             itemList={genres}
             onItemSelect={this.handleGenreSelect}
@@ -102,13 +117,17 @@ class Movies extends Component {
           />
         </div>
 
-        <div className="col">
+        <div className="col-md-8">
           <Link to="/movies/new">
             <button className="btn btn-primary">New Movie</button>
           </Link>
           <br />
           <br />
           <p>Showing {totalCount} movies in the database.</p>
+
+          <Search value={this.state.search} onChange={this.handleSearch} />
+
+          <br />
           <MoviesTable
             movies={movies}
             onLike={this.handleLike}
