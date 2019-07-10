@@ -2,15 +2,15 @@ import http from "./httpService";
 import { apiURL } from "../config.json";
 
 export function getMovies() {
-  return http.get(apiURL + "/movies");
+  return http.get(apiURL + "/movies"); //returns Promise object
 }
 
 export function deleteMovie(movieId) {
-  return http.delete(apiURL + "/movies/" + movieId);
+  return http.delete(apiURL + "/movies/" + movieId); //returns Promise object
 }
 
 export function getMovie(movieId) {
-  return http.get(apiURL + "/movies/" + movieId);
+  return http.get(apiURL + "/movies/" + movieId); //returns Promise object
 }
 
 export function saveMovie(movie) {
@@ -24,6 +24,6 @@ export function saveMovie(movie) {
     });
   } else {
     console.log("doing post");
-    return http.post(apiURL + "/movies", movie);
+    return http.post(apiURL + "/movies", movie); //returns Promise object
   }
 }

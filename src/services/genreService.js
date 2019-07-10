@@ -4,7 +4,7 @@ import config from "../config.json";
 // import {apiURL} from "../config.json";
 
 export function getGenres() {
-  return http.get(config.apiURL + "/genres");
+  return http.get(config.apiURL + "/genres"); //returns Promise object
 }
 
 //export all functions that were exported by fakeGenreService
