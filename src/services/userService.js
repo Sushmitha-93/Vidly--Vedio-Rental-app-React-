@@ -1,3 +1,4 @@
+// For Register form - Signing up new user
 import http from "./httpService";
 import { apiURL } from "../config.json";
 

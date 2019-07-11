@@ -22,7 +22,14 @@ class LoginForm extends Form {
 
   doSubmit = async () => {
     try {
-      await loginUser(this.state.data.username, this.state.data.password);
+      const { data: jwt } = await loginUser(
+        this.state.data.username,
+        this.state.data.password
+      );
+      console.log(jwt);
+      localStorage.setItem("JWT token", jwt); //storing JWT returned in localStorage of Browser
+      //this.props.history.push("/");
+      window.location = "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         //400 is for client error

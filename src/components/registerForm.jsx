@@ -25,7 +25,11 @@ class RegisterForm extends Form {
 
   doSubmit = async () => {
     try {
-      await register(this.state.data);
+      const response = await register(this.state.data);
+      console.log("API Response promise object: ", response);
+      localStorage.setItem("JWT token", response.headers["x-auth-token"]); //Storing JWM token in local storage of browser
+      //this.props.history.push("/");
+      window.location = "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         //Client error
