@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import jwtDecode from "jwt-decode";
 import "./App.css";
 import Movies from "./components/movies";
 import NavBar from "./components/navbar";
@@ -13,17 +12,14 @@ import RegisterForm from "./components/registerForm";
 import Logout from "./components/logout";
 import { ToastContainer } from "react-toastify"; //React-Toastify
 import "react-toastify/dist/ReactToastify.css"; //React-Toastify
+import auth from "./services/authService";
 
 class App extends Component {
   state = {};
 
   componentDidMount() {
-    try {
-      const jwt = localStorage.getItem("JWT token"); // 1) Get JWT from local storage of Browser
-      const user = jwtDecode(jwt); //2) Decode JWT using decode function of jwt-decode library
-      console.log(user);
-      this.setState({ user }); //creates a new state, to pass this as PROP to any component you want, so that that component has access to basic user information
-    } catch (ex) {} // JWT token will be null in the start, because it will be set only on login/sign up
+    const user = auth.getCurrentUser();
+    this.setState({ user }); //creates a new state & then set it, to pass this as PROP to any component you want, so that that component has access to basic user information
   }
 
   render() {

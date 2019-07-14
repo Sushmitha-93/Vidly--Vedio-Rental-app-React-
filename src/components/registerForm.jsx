@@ -1,7 +1,8 @@
 import React from "react";
 import Form from "./common/form";
 import Joi from "joi-browser";
-import { register } from "../services/userService";
+import userService from "../services/userService";
+import auth from "../services/authService";
 
 class RegisterForm extends Form {
   state = {
@@ -25,9 +26,10 @@ class RegisterForm extends Form {
 
   doSubmit = async () => {
     try {
-      const response = await register(this.state.data);
+      const response = await userService.register(this.state.data); //  Register api sends a new JWT in its header as "x-auth-token"
       console.log("API Response promise object: ", response);
-      localStorage.setItem("JWT token", response.headers["x-auth-token"]); //Storing JWM token in local storage of browser
+
+      auth.loginWithJWT(response.headers["x-auth-token"]);
       //this.props.history.push("/");
       window.location = "/";
     } catch (ex) {

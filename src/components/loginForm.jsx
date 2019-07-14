@@ -2,7 +2,7 @@ import React from "react";
 import Form from "./common/form";
 
 import Joi from "joi-browser";
-import { loginUser } from "../services/loginService";
+import auth from "../services/authService";
 
 class LoginForm extends Form {
   state = {
@@ -22,14 +22,7 @@ class LoginForm extends Form {
 
   doSubmit = async () => {
     try {
-      const { data: jwt } = await loginUser(
-        this.state.data.username,
-        this.state.data.password
-      );
-      console.log(jwt);
-      localStorage.setItem("JWT token", jwt); //storing JWT returned in localStorage of Browser
-      //this.props.history.push("/");
-      window.location = "/";
+      await auth.login(this.state.data.username, this.state.data.password);
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         //400 is for client error
