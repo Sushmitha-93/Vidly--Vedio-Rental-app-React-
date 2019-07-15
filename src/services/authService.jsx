@@ -8,7 +8,7 @@ http.setJwt(getJwt()); // Calling set method of httpService to avoid Bi-Directio
 
 export async function login(email, password) {
   const { data: jwt } = await http.post(apiURL + "/auth", { email, password }); // returns Promise object with JWT in data
-  console.log(jwt);
+  console.log("JWT:\n", jwt);
 
   localStorage.setItem(tokenKey, jwt); //storing JWT returned in localStorage of Browser
 
@@ -17,7 +17,7 @@ export async function login(email, password) {
 }
 
 export function loginWithJWT(jwt) {
-  localStorage.setItem(tokenKey, jwt); //Storing JWM token in local storage of browser
+  localStorage.setItem(tokenKey, jwt); //Storing JWT token in local storage of browser
 }
 
 export function logout() {
@@ -28,7 +28,7 @@ export function getCurrentUser() {
   try {
     const jwt = localStorage.getItem(tokenKey); // 1) Get JWT from local storage of Browser
     const user = jwtDecode(jwt); //2) Decode JWT using decode function of jwt-decode library
-    console.log(user);
+    console.log("Decoded JWT:\n", user);
     return user;
   } catch (ex) {
     return null;

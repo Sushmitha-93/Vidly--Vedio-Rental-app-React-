@@ -13,6 +13,7 @@ import Logout from "./components/logout";
 import { ToastContainer } from "react-toastify"; //React-Toastify
 import "react-toastify/dist/ReactToastify.css"; //React-Toastify
 import auth from "./services/authService";
+import ProtectedRoute from "./components/common/protectedRoute";
 
 class App extends Component {
   state = {};
@@ -23,21 +24,26 @@ class App extends Component {
   }
 
   render() {
+    const { user } = this.state;
     return (
       <React-Fragment>
         <ToastContainer />
-        <NavBar user={this.state.user} />{" "}
-        {/* Passing user info to Navbar component */}
+        <NavBar user={user} /> {/* Passing user info to Navbar component */}
         <main className="container">
           <Switch>
             <Route path="/registerForm" component={RegisterForm} />
             <Route path="/loginForm" component={LoginForm} />
             <Route path="/logout" component={Logout} />
-            <Route path="/movies/:id" component={MoviesForm} />
+            <ProtectedRoute path="/movies/:id" component="MoviesForm" />
             <Route path="/customers" component={Customers} />
             <Route path="/rentals" component={Rentals} />
             <Route path="/not-found" component={NotFound} />
-            <Route path="/movies" component={Movies} />
+            <Route
+              path="/movies"
+              render={props => (
+                <Movies {...props} user={this.state.user} />
+              )} /* to pass props to Movie component in Route- must make sure you pass default react props(History...) along with required props*/
+            />
             <Redirect from="/" exact to="/movies" />
             <Redirect to="/not-found" />
           </Switch>
