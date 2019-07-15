@@ -4,6 +4,8 @@ import { apiURL } from "../config.json";
 
 const tokenKey = "JWT token";
 
+http.setJwt(getJwt()); // Calling set method of httpService to avoid Bi-Directional dependency
+
 export async function login(email, password) {
   const { data: jwt } = await http.post(apiURL + "/auth", { email, password }); // returns Promise object with JWT in data
   console.log(jwt);
@@ -33,11 +35,16 @@ export function getCurrentUser() {
   } // if jwtDecode() fails - JWT token will be null in the start, because it will be set only on login/sign up
 }
 
+export function getJwt() {
+  return localStorage.getItem(tokenKey);
+}
+
 //Exporting default object - having login(),logout(),....
 // so in other files, we need to import this object and then call these functions like auth.login(), auth.logout()
 export default {
   login,
   loginWithJWT,
   logout,
-  getCurrentUser
+  getCurrentUser,
+  getJwt
 };
