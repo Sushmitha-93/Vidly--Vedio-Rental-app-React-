@@ -119,6 +119,7 @@ class Movies extends Component {
     } = this.state;
 
     const { totalCount, movies } = this.getPagedData();
+    const { user } = this.props;
 
     if (count === 0) return <p>There are no movies in the database.</p>;
 
@@ -133,11 +134,15 @@ class Movies extends Component {
         </div>
 
         <div className="col-md-8">
-          <Link to="/movies/new">
-            <button className="btn btn-primary">New Movie</button>
-          </Link>
-          <br />
-          <br />
+          {user && (
+            <React.Fragment>
+              <Link to="/movies/new">
+                <button className="btn btn-primary">New Movie</button>
+              </Link>
+              <br />
+              <br />
+            </React.Fragment>
+          )}
           <p>Showing {totalCount} movies in the database.</p>
 
           <Search value={this.state.search} onChange={this.handleSearch} />
