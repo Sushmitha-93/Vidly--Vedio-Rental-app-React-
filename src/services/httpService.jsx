@@ -9,7 +9,7 @@ import logService from "./logService";
 causing Bi-Directional dependency between them (that's bad). So, using setJwt() instead to avoid importing 
 authService (Line 29) */
 
-Axios.defaults.baseURL = process.env.REACT_APP_API_URL; // This will change according to the environment build
+//Axios.defaults.baseURL = process.env.REACT_APP_API_URL; // This will change according to the environment build
 
 Axios.interceptors.response.use(null, error => {
   const expectedError =
