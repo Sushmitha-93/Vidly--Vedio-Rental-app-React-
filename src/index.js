@@ -6,6 +6,8 @@ import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 
+console.log("Environment variables", process.env);
+
 ReactDOM.render(
   <BrowserRouter>
     <App />
