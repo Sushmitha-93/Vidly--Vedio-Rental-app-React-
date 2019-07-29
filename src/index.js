@@ -7,8 +7,6 @@ import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 
 console.log("Environment variables", process.env);
-console.log("Env var api url", process.env.REACT_APP_API_URL);
-
 
 ReactDOM.render(
   <BrowserRouter>
