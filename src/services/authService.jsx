@@ -1,13 +1,13 @@
 import jwtDecode from "jwt-decode";
 import http from "./httpService";
-//import { apiURL } from "../config.json";
+import { apiURL } from "../config.json";
 
 const tokenKey = "JWT token";
 
 http.setJwt(getJwt()); // Calling set method of httpService to avoid Bi-Directional dependency
 
 export async function login(email, password) {
-  const { data: jwt } = await http.post("/auth", { email, password }); // returns Promise object with JWT in data
+  const { data: jwt } = await http.post(apiURL + "/auth", { email, password }); // returns Promise object with JWT in data
   console.log(jwt);
 
   localStorage.setItem(tokenKey, jwt); //storing JWT returned in localStorage of Browser
